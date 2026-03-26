@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MargenPro · Loops de Marcas Rentables</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f2f4f6;
+    --cream: #f8f9fa;
+    --accent: #00d4ff;
+    --accent-dark: #00a8cc;
+    --accent2: #00d4ff;
+    --accent3: #16a34a;
+    --gold: #d4a017;
+    --muted: #6b7280;
+    --border: #e2e6ea;
+    --card: #ffffff;
+    --shadow: 0 2px 20px rgba(10,10,15,0.07);
+    --shadow-lg: 0 8px 40px rgba(10,10,15,0.13);
+    --brand-bg: #000000;
+    --brand-cyan: #00d4ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    background: #000000;
+    color: #ffffff;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--brand-cyan);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .logo img {
+    height: 38px;
+    width: 38px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  .logo-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+  }
+  .logo-text span {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--brand-cyan);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tab-nav {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .tab-btn {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.45rem 1.1rem;
+    border: 1.5px solid transparent;
+    background: transparent;
+    color: rgba(244,241,235,0.55);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: var(--brand-cyan);
+    color: #000;
+    border-color: var(--brand-cyan);
+  }
+  .tab-btn:not(.active):hover {
+    border-color: rgba(244,241,235,0.3);
+    color: var(--paper);
+  }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.4rem;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+  @media (max-width: 780px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .tab-btn { padding: 0.4rem 0.7rem; font-size: 0.7rem; }
+    .logo { font-size: 1.1rem; }
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 1.6rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* INPUTS */
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.01em;
+  }
+  .field .hint {
+    font-size: 0.7rem;
+    color: #b0ab9f;
+    margin-top: 0.25rem;
+  }
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-wrap .prefix, .input-wrap .suffix {
+    position: absolute;
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 500;
+    pointer-events: none;
+  }
+  .input-wrap .prefix { left: 0.8rem; }
+  .input-wrap .suffix { right: 0.8rem; }
+  .input-wrap input { width: 100%; }
+  .has-prefix input { padding-left: 1.8rem; }
+  .has-suffix input { padding-right: 2rem; }
+
+  input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    background: var(--cream);
+    color: var(--ink);
+    transition: border-color 0.15s, background 0.15s;
+    -moz-appearance: textfield;
+  }
+  input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input:focus {
+    outline: none;
+    border-color: var(--accent2);
+    background: #fff;
+  }
+  .has-prefix input::placeholder, .has-suffix input::placeholder { color: transparent; }
+
+  /* RESULTS */
+  .result-block {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 1.6rem;
+    position: sticky;
+    top: 82px;
+  }
+  .result-block .r-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 0.2rem;
+  }
+  .result-block .r-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.1rem;
+  }
+  .result-block .r-sub {
+    font-size: 0.78rem;
+    opacity: 0.5;
+    margin-bottom: 1.2rem;
+  }
+
+  .waterfall {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 0.5rem;
+  }
+  .wf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.55rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    transition: background 0.15s;
+  }
+  .wf-row:hover { background: rgba(255,255,255,0.05); }
+  .wf-row .wf-name { opacity: 0.7; }
+  .wf-row .wf-val { font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.88rem; }
+  .wf-row.negative .wf-val { color: #ff7c60; }
+  .wf-row.positive .wf-val { color: #60d9a0; }
+  .wf-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 0.4rem 0; }
+  .wf-row.total {
+    background: rgba(255,255,255,0.08);
+    font-weight: 600;
+    border-radius: 8px;
+    margin-top: 0.4rem;
+  }
+  .wf-row.total .wf-name { opacity: 1; }
+  .wf-row.subtotal { opacity: 0.85; }
+  .wf-row.subtotal .wf-val { color: #fcd34d; }
+
+  /* MARGIN GAUGE */
+  .gauge-wrap { margin-top: 1.2rem; }
+  .gauge-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-bottom: 0.4rem;
+  }
+  .gauge-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .gauge-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1), background 0.4s;
+  }
+  .gauge-legend {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    opacity: 0.4;
+    flex-wrap: wrap;
+  }
+
+  /* ALERTS */
+  .alert {
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    margin-top: 1rem;
+    border-left: 3px solid;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  .alert.danger { background: rgba(232,67,26,0.12); border-color: var(--accent); color: #c0321a; }
+  .alert.warning { background: rgba(212,160,23,0.12); border-color: var(--gold); color: #8a6a10; }
+  .alert.success { background: rgba(22,163,74,0.12); border-color: var(--accent3); color: #166534; }
+
+  /* PRICING SECTION */
+  .scenario-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  @media (max-width: 780px) { .scenario-cards { grid-template-columns: 1fr; } }
+
+  .scenario-card {
+    border-radius: 12px;
+    padding: 1.4rem;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+  }
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .scenario-card.s1 { border-color: #dbeafe; background: #eff6ff; }
+  .scenario-card.s1::before { background: var(--accent2); }
+  .scenario-card.s2 { border-color: #d1fae5; background: #f0fdf4; }
+  .scenario-card.s2::before { background: var(--accent3); }
+  .scenario-card.s3 { border-color: #fef3c7; background: #fffbeb; }
+  .scenario-card.s3::before { background: var(--gold); }
+
+  .sc-tag {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+  .sc-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .sc-price {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.3rem;
+  }
+  .sc-margin {
+    font-size: 0.78rem;
+    opacity: 0.65;
+    margin-bottom: 0.8rem;
+  }
+  .sc-desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    opacity: 0.7;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 0.8rem;
+  }
+
+  .market-ref {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--border);
+    margin-top: 1.2rem;
+  }
+  .mref-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .mref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .mref-item {}
+  .mref-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.4rem; }
+  .mref-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 0.3rem;
+  }
+  .mref-fill {
+    height: 100%;
+    border-radius: 99px;
+  }
+  .mref-fill.national { background: var(--accent2); }
+  .mref-fill.intl { background: var(--accent); }
+  .mref-vals { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); }
+
+  /* RECOMMENDED PRICE */
+  .rec-price-box {
+    background: linear-gradient(135deg, var(--ink) 0%, #1a1a2e 100%);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 1.6rem;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .rpb-label { font-size: 0.78rem; opacity: 0.55; margin-bottom: 0.3rem; }
+  .rpb-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .rpb-note { font-size: 0.78rem; opacity: 0.45; margin-top: 0.2rem; }
+  .rpb-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    text-align: center;
+  }
+  .rpb-badge .b-val {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .rpb-badge .b-label { font-size: 0.68rem; opacity: 0.5; }
+
+  /* DIVIDER */
+  .sep { height: 1px; background: var(--border); margin: 2rem 0; }
+
+  /* TOOLTIP */
+  [data-tip] { position: relative; cursor: help; }
+  [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.7rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 10;
+    max-width: 220px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+  }
+  [data-tip]:hover::after { opacity: 1; }
+
+  .help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px; height: 14px;
+    background: var(--border);
+    border-radius: 50%;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-left: 0.3rem;
+    vertical-align: middle;
+    cursor: help;
+    position: relative;
+  }
+
+  /* CURRENCY TOGGLE */
+  .currency-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .currency-row label { font-size: 0.8rem; color: var(--muted); }
+  .currency-select {
+    padding: 0.35rem 0.7rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    background: var(--cream);
+    cursor: pointer;
+  }
+
+  /* PRINT / EXPORT */
+  .action-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #c73512; }
+  .btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--muted); }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section.active { animation: fadeIn 0.3s ease; }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .tag-new { background: #dbeafe; color: #1e40af; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="data:image/png;base64,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" id="brandLogo" alt="Loops de Marcas Rentables" onerror="this.style.display='none'">
+    <div class="logo-text">
+      MargenPro
+      <span>by Loops de Marcas Rentables</span>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showSection('margen')">📊 Margen Neto</button>
+    <button class="tab-btn" onclick="showSection('pricing')">🎯 Pricing</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- BANNER BIENVENIDA -->
+<div style="background:#000;color:#fff;border-radius:14px;padding:2rem 2.2rem;margin-bottom:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;border:1px solid #1a1a1a;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:0;right:0;width:300px;height:100%;background:radial-gradient(ellipse at top right, rgba(0,212,255,0.12) 0%, transparent 70%);pointer-events:none;"></div>
+  <div style="position:relative;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-cyan);margin-bottom:0.5rem;">Herramienta exclusiva · Loops de Marcas Rentables</div>
+    <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.5rem;line-height:1.2;">Calcula el margen real de tu negocio<br>y define precios con estrategia.</h2>
+    <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);max-width:520px;line-height:1.6;">Usa las calculadoras de margen neto y pricing para tomar decisiones basadas en números reales. Todo corre en tu navegador — tus datos no se guardan en ningún servidor.</p>
+  </div>
+  <div style="position:relative;text-align:center;flex-shrink:0;">
+    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-bottom:0.6rem;">¿Quieres acompañamiento personalizado?</div>
+    <button onclick="document.getElementById('calendly-section').scrollIntoView({behavior:'smooth'})" style="background:var(--brand-cyan);color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;padding:0.75rem 1.4rem;border:none;border-radius:8px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#00b8e6'" onmouseout="this.style.background='var(--brand-cyan)'">
+      📅 Agendar llamada gratuita
+    </button>
+    <div style="font-size:0.68rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">Mentoría Loops de Marcas Rentables</div>
+  </div>
+</div>
+
+<!-- ======================== SECCIÓN 1: MARGEN NETO ======================== -->
+<div id="margen" class="section active">
+  <h1 class="section-title">Calculadora de Margen Neto</h1>
+  <p class="section-sub">Visualiza cómo cada costo erosiona tu ingreso hasta llegar al margen neto real de tu negocio.</p>
+
+  <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+      <label style="font-size:0.8rem;color:var(--muted);">Moneda:</label>
+      <select class="currency-select" id="currencySelect" onchange="updateCurrency()">
+        <option value="CLP">CLP — Peso Chileno ($)</option>
+        <option value="USD">USD — Dólar ($)</option>
+        <option value="EUR">EUR — Euro (€)</option>
+        <option value="MXN">MXN — Peso Mexicano ($)</option>
+        <option value="ARS">ARS — Peso Argentino ($)</option>
+        <option value="COP">COP — Peso Colombiano ($)</option>
+        <option value="PEN">PEN — Sol Peruano (S/)</option>
+      </select>
+    </div>
+    <button class="btn btn-ghost" onclick="resetMargen()">↺ Limpiar</button>
+  </div>
+
+  <div class="grid-2">
+    <!-- INPUTS -->
+    <div>
+      <!-- Ingresos -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div class="card-title"><span class="dot" style="background:#60d9a0"></span>Ingresos</div>
+
+        <div class="field">
+          <label>Venta neta <span class="help-icon" data-tip="Total facturado sin IVA, antes de descuentos o devoluciones. Venta bruta ÷ 1.19 si trabajas en Chile.">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx1">$</span>
+            <input type="number" id="ventasBrutas" value="" placeholder="0" oninput="calc()">
+          </div>
+          <div class="hint" style="display:flex;align-items:center;gap:0.3rem;">
+            <span style="background:#fef3c7;color:#92400e;font-size:0.65rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:3px;letter-spacing:0.04em;">SIN IVA</span>
+            Precio sin IVA. Si tienes el valor con IVA, divídelo por 1.19 (Chile) para obtener la venta neta.
+          </div>
+        </div>
+        <div class="field">
+          <label>Descuentos / Devoluciones <span class="help-icon" data-tip="Cupones, reembolsos, devoluciones de clientes">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx2">$</span>
+            <input type="number" id="descuentos" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Comisiones plataforma (%) <span class="help-icon" data-tip="MercadoLibre, Shopify, Amazon, etc.">?</span></label>
+          <div class="input-wrap has-suffix">
+            <span class="suffix">%</span>
+            <input type="number" id="comisionPct" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Costo de Producto -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div class="card-title"><span class="dot" style="background:#ff7c60"></span>Costo del Producto</div>
+        <div class="field">
+          <label>Costo de mercancía vendida (CMV) <span class="help-icon" data-tip="Costo de producción o compra del inventario vendido">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx3">$</span>
+            <input type="number" id="cmv" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Fulfillment / Logística <span class="help-icon" data-tip="Bodegaje, empaque, envío al cliente, last-mile">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx4">$</span>
+            <input type="number" id="fulfillment" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Gastos Operativos -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div class="card-title"><span class="dot" style="background:#fcd34d"></span>Gastos Operativos y Administrativos</div>
+        <div class="field">
+          <label>Gastos administrativos <span class="help-icon" data-tip="Sueldos de administración, contabilidad, arriendos de oficina">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx5">$</span>
+            <input type="number" id="gastosAdmin" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Gastos operativos <span class="help-icon" data-tip="Sueldos operaciones, software, herramientas, servicios">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx6">$</span>
+            <input type="number" id="gastosOp" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Gastos de Venta y Financieros -->
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:#c084fc"></span>Gastos de Venta y Financieros</div>
+        <div class="field">
+          <label>Publicidad y marketing <span class="help-icon" data-tip="Meta Ads, Google Ads, influencers, agencias">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx7">$</span>
+            <input type="number" id="marketing" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Otros gastos de venta <span class="help-icon" data-tip="Equipo de ventas, comisiones a vendedores">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx8">$</span>
+            <input type="number" id="gastosVenta" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Gastos financieros <span class="help-icon" data-tip="Intereses de crédito, costo de financiamiento, fees bancarios">?</span></label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pfx9">$</span>
+            <input type="number" id="gastosFinan" value="" placeholder="0" oninput="calc()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div>
+      <div class="result-block" id="resultBlock">
+        <div class="r-label">Margen Neto</div>
+        <div class="r-value" id="margenPct">—</div>
+        <div class="r-sub" id="margenAbs">Ingresa tus datos para ver el resultado</div>
+
+        <div class="gauge-wrap">
+          <div class="gauge-label"><span>0%</span><span>50%</span></div>
+          <div class="gauge-bar"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
+          <div class="gauge-legend">
+            <span>🔴 &lt;5% crítico</span>
+            <span>🟡 5-15% aceptable</span>
+            <span>🟢 &gt;15% sólido</span>
+          </div>
+        </div>
+
+        <div class="wf-divider" style="margin-top:1.2rem;"></div>
+
+        <div class="waterfall" id="waterfall">
+          <div class="wf-row positive">
+            <span class="wf-name">Venta neta</span>
+            <span class="wf-val" id="wf-vb">$0</span>
+          </div>
+          <div class="wf-row negative">
+            <span class="wf-name">− Descuentos / Devoluciones</span>
+            <span class="wf-val" id="wf-desc">$0</span>
+          </div>
+          <div class="wf-row negative">
+            <span class="wf-name">− Comisiones plataforma</span>
+            <span class="wf-val" id="wf-com">$0</span>
+          </div>
+          <div class="wf-row subtotal">
+            <span class="wf-name">= Ingreso Neto</span>
+            <span class="wf-val" id="wf-ingrNeto">$0</span>
+          </div>
+          <div class="wf-divider"></div>
+          <div class="wf-row negative">
+            <span class="wf-name">− CMV + Fulfillment</span>
+            <span class="wf-val" id="wf-cmv">$0</span>
+          </div>
+          <div class="wf-row subtotal">
+            <span class="wf-name">= Margen de Explotación</span>
+            <span class="wf-val" id="wf-exploit">$0</span>
+          </div>
+          <div style="font-size:0.7rem;opacity:0.4;padding:0.3rem 0.7rem;font-style:italic;">— Gastos del período —</div>
+          <div class="wf-row negative">
+            <span class="wf-name">− Gastos Adm. + Operativos</span>
+            <span class="wf-val" id="wf-op">$0</span>
+          </div>
+          <div class="wf-row negative">
+            <span class="wf-name">− Gastos de Venta</span>
+            <span class="wf-val" id="wf-venta">$0</span>
+          </div>
+          <div class="wf-row negative">
+            <span class="wf-name">− Gastos Financieros</span>
+            <span class="wf-val" id="wf-finan">$0</span>
+          </div>
+          <div class="wf-divider"></div>
+          <div class="wf-row total">
+            <span class="wf-name">MARGEN NETO</span>
+            <span class="wf-val" id="wf-neto">$0</span>
+          </div>
+        </div>
+
+        <div id="alertBox" style="margin-top:0.8rem;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECCIÓN 2: PRICING ======================== -->
+<div id="pricing" class="section">
+  <h1 class="section-title">Calculadora de Pricing</h1>
+  <p class="section-sub">Calcula el precio de venta ideal según tus costos, las referencias del mercado y 3 escenarios estratégicos de velocidad de venta.</p>
+
+  <!-- MONEDA + TIPO DE CAMBIO -->
+  <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.8rem;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.4rem;">
+    <div style="display:flex;align-items:center;gap:0.6rem;">
+      <label style="font-size:0.78rem;color:var(--muted);font-weight:500;">Moneda local:</label>
+      <select class="currency-select" id="p_currency" onchange="updatePricingCurrency()">
+        <option value="CLP">CLP — Peso Chileno</option>
+        <option value="USD">USD — Dólar</option>
+        <option value="EUR">EUR — Euro</option>
+        <option value="MXN">MXN — Peso Mexicano</option>
+        <option value="ARS">ARS — Peso Argentino</option>
+        <option value="COP">COP — Peso Colombiano</option>
+        <option value="PEN">PEN — Sol Peruano</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.6rem;">
+      <label style="font-size:0.78rem;color:var(--muted);font-weight:500;">1 USD =</label>
+      <div style="position:relative;display:flex;align-items:center;">
+        <input type="number" id="p_tc" value="950" style="width:110px;padding:0.4rem 0.7rem;border:1.5px solid var(--border);border-radius:6px;font-size:0.88rem;background:var(--cream);" oninput="calcPricing()">
+      </div>
+      <span id="p_tc_label" style="font-size:0.78rem;color:var(--muted);">CLP</span>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);background:var(--paper);border-radius:6px;padding:0.3rem 0.7rem;border:1px solid var(--border);">
+      💡 Las referencias internacionales se ingresan siempre en <strong>USD</strong> y se convierten automáticamente
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- INPUTS -->
+    <div>
+      <!-- COGS -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div class="card-title"><span class="dot" style="background:#60d9a0"></span>Costo del Producto (COGS)</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;padding:0.6rem 0.8rem;background:var(--paper);border-radius:6px;border-left:3px solid #60d9a0;">
+          Margen bruto = (Precio − COGS) ÷ Precio · Todo en <span id="cogs_currency_label">CLP</span>
+        </div>
+        <div class="field">
+          <label>Costo de compra / producción por unidad</label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pp_sym1">$</span>
+            <input type="number" id="p_costo" value="" oninput="calcPricing()">
+          </div>
+          <div class="hint">Lo que pagas al proveedor o lo que cuesta producir una unidad</div>
+        </div>
+        <div class="field">
+          <label>Envío / Fulfillment por unidad</label>
+          <div class="input-wrap has-prefix">
+            <span class="prefix" id="pp_sym2">$</span>
+            <input type="number" id="p_envio" value="" oninput="calcPricing()">
+          </div>
+          <div class="hint">Empaque + despacho + última milla + bodegaje si aplica</div>
+        </div>
+        <div style="background:var(--paper);border-radius:8px;padding:0.8rem 1rem;border:1px solid var(--border);margin-top:0.5rem;">
+          <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.2rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">COGS Total por unidad</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:800;" id="p_cogs_display">—</div>
+        </div>
+      </div>
+
+      <!-- COMISIÓN -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div class="card-title"><span class="dot" style="background:#c084fc"></span>Comisión de Plataforma</div>
+        <div class="field" style="margin-bottom:0;">
+          <label>% que cobra tu canal de venta <span class="help-icon" data-tip="MercadoLibre ~13–16%, Shopify ~2%, Amazon ~8–15%">?</span></label>
+          <div class="input-wrap has-suffix">
+            <span class="suffix">%</span>
+            <input type="number" id="p_comision" value="" oninput="calcPricing()">
+          </div>
+          <div class="hint">Se descuenta del precio de venta antes de calcular el margen bruto</div>
+        </div>
+      </div>
+
+      <!-- REFERENCIAS DE MERCADO -->
+      <div class="card" style="margin-bottom:1.2rem;">
+        <div class="card-title"><span class="dot" style="background:#fbbf24"></span>Referencias de Mercado</div>
+
+        <div style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;">🏠 Mercado Local — en <span class="local-cur-label">CLP</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.2rem;">
+          <div class="field" style="margin:0;">
+            <label>Precio mínimo</label>
+            <div class="input-wrap has-prefix">
+              <span class="prefix p_local_sym">$</span>
+              <input type="number" id="p_localMin" value="" oninput="calcPricing()">
+            </div>
+          </div>
+          <div class="field" style="margin:0;">
+            <label>Precio máximo</label>
+            <div class="input-wrap has-prefix">
+              <span class="prefix p_local_sym">$</span>
+              <input type="number" id="p_localMax" value="" oninput="calcPricing()">
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;">🌎 Mercado Internacional — siempre en <strong style="color:var(--accent2);">USD $</strong></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+          <div class="field" style="margin:0;">
+            <label>Precio mínimo (USD)</label>
+            <div class="input-wrap has-prefix">
+              <span class="prefix" style="color:var(--accent2);">$</span>
+              <input type="number" id="p_intlMin" value="" oninput="calcPricing()">
+            </div>
+          </div>
+          <div class="field" style="margin:0;">
+            <label>Precio máximo (USD)</label>
+            <div class="input-wrap has-prefix">
+              <span class="prefix" style="color:var(--accent2);">$</span>
+              <input type="number" id="p_intlMax" value="" oninput="calcPricing()">
+            </div>
+          </div>
+        </div>
+        <div id="intl_converted_note" style="display:none;margin-top:0.8rem;font-size:0.75rem;color:var(--muted);background:var(--paper);padding:0.5rem 0.8rem;border-radius:6px;border-left:3px solid var(--accent2);"></div>
+      </div>
+
+      <!-- MÁRGENES POR ESCENARIO -->
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:#f97316"></span>Margen Bruto Objetivo por Escenario</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;padding:0.6rem 0.8rem;background:var(--paper);border-radius:6px;border-left:3px solid #f97316;">
+          Margen bruto = lo que queda después de restar solo el COGS al precio (antes de gastos operativos)
+        </div>
+        <div class="field">
+          <label>🔵 Escenario 1 — Validación</label>
+          <div class="input-wrap has-suffix"><span class="suffix">%</span>
+            <input type="number" id="p_m1" value="20" oninput="calcPricing()">
+          </div>
+          <div class="hint">Precio de entrada. Prioriza volumen y velocidad de aprendizaje sobre rentabilidad.</div>
+        </div>
+        <div class="field">
+          <label>🟢 Escenario 2 — Producto Validado</label>
+          <div class="input-wrap has-suffix"><span class="suffix">%</span>
+            <input type="number" id="p_m2" value="35" oninput="calcPricing()">
+          </div>
+          <div class="hint">Tu precio de crucero. Ya tienes reviews y conversión probada.</div>
+        </div>
+        <div class="field">
+          <label>🟡 Escenario 3 — Poco Stock</label>
+          <div class="input-wrap has-suffix"><span class="suffix">%</span>
+            <input type="number" id="p_m3" value="50" oninput="calcPricing()">
+          </div>
+          <div class="hint">Frena la velocidad de venta sin llegar a quiebre de stock.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div>
+      <!-- ESTADO VACÍO -->
+      <div id="pricingEmpty" style="padding:3rem 1.5rem;text-align:center;color:var(--muted);background:var(--card);border-radius:12px;border:1.5px dashed var(--border);">
+        <div style="font-size:2.5rem;margin-bottom:0.8rem;">🎯</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.4rem;">Ingresa el costo del producto</div>
+        <div style="font-size:0.82rem;line-height:1.6;">El precio sugerido y los 3 escenarios<br>aparecerán aquí automáticamente</div>
+      </div>
+
+      <!-- RESULTADOS ACTIVOS -->
+      <div id="precioSugeridoBox" style="display:none;">
+
+        <!-- PRECIO SUGERIDO -->
+        <div style="background:var(--ink);color:var(--paper);border-radius:12px;padding:1.8rem;margin-bottom:1.2rem;">
+          <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;margin-bottom:0.5rem;">Precio sugerido de venta</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:3.2rem;font-weight:800;letter-spacing:-0.04em;line-height:1.1;" id="precioSugerido">—</div>
+          <div style="font-size:0.75rem;opacity:0.4;margin-top:0.4rem;margin-bottom:1.4rem;" id="precioSugeridoNota">Ingresa referencias de mercado para obtener el precio sugerido</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
+            <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.7rem 0.9rem;">
+              <div style="font-size:0.62rem;opacity:0.4;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">COGS</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;" id="ps_cogs">—</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.7rem 0.9rem;">
+              <div style="font-size:0.62rem;opacity:0.4;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Ganancia bruta</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;color:#60d9a0;" id="ps_ganancia">—</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.7rem 0.9rem;">
+              <div style="font-size:0.62rem;opacity:0.4;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">Margen bruto</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;color:#fcd34d;" id="ps_margen">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCENARIOS -->
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem;">3 Escenarios Estratégicos</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.2rem;">
+
+          <div class="scenario-card s1" style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem;padding:1.1rem 1.3rem;">
+            <div>
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;margin-bottom:0.2rem;">Escenario 1</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.95rem;">Validación</div>
+              <div style="font-size:0.72rem;opacity:0.6;margin-top:0.15rem;">Precio de entrada · Alto volumen</div>
+            </div>
+            <div style="font-size:0.75rem;color:#3b5998;opacity:0.75;" id="sc1_desc">Prioriza aprendizaje sobre rentabilidad. Úsalo hasta tener suficientes reviews y datos de conversión.</div>
+            <div style="text-align:right;min-width:90px;">
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:-0.03em;" id="sc1-price">—</div>
+              <div style="font-size:0.7rem;opacity:0.6;" id="sc1-margin"></div>
+            </div>
+          </div>
+
+          <div class="scenario-card s2" style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem;padding:1.1rem 1.3rem;">
+            <div>
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;margin-bottom:0.2rem;">Escenario 2</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.95rem;">Producto Validado</div>
+              <div style="font-size:0.72rem;opacity:0.6;margin-top:0.15rem;">Precio de crucero · Rentabilidad</div>
+            </div>
+            <div style="font-size:0.75rem;color:#166534;opacity:0.75;">Reviews positivos, conversión probada. Tu precio operativo normal con margen sostenible.</div>
+            <div style="text-align:right;min-width:90px;">
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:-0.03em;" id="sc2-price">—</div>
+              <div style="font-size:0.7rem;opacity:0.6;" id="sc2-margin"></div>
+            </div>
+          </div>
+
+          <div class="scenario-card s3" style="display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem;padding:1.1rem 1.3rem;">
+            <div>
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;margin-bottom:0.2rem;">Escenario 3</div>
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:0.95rem;">Poco Stock</div>
+              <div style="font-size:0.72rem;opacity:0.6;margin-top:0.15rem;">Precio de freno · Protege stock</div>
+            </div>
+            <div style="font-size:0.75rem;color:#854d0e;opacity:0.75;">Sube el precio para frenar la velocidad de venta sin llegar a quiebre. Mientras llega el próximo pedido.</div>
+            <div style="text-align:right;min-width:90px;">
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.7rem;font-weight:800;letter-spacing:-0.03em;" id="sc3-price">—</div>
+              <div style="font-size:0.7rem;opacity:0.6;" id="sc3-margin"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPARACIÓN VS MERCADO -->
+        <div id="mktCompare" style="display:none;">
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:#60d9a0"></span>Comparación vs. Mercado</div>
+            <div id="mktCompareContent"></div>
+          </div>
+        </div>
+
+        <div id="pricingAlert" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- CALENDLY SECTION -->
+<div id="calendly-section" style="background:#000;border-radius:14px;padding:2.5rem 2.2rem;margin-top:3rem;border:1px solid #1a1a1a;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at bottom left, rgba(0,212,255,0.08) 0%, transparent 60%);pointer-events:none;"></div>
+  <div style="position:relative;text-align:center;margin-bottom:1.8rem;">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--brand-cyan);margin-bottom:0.6rem;">¿Listo para escalar tu marca?</div>
+    <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-0.02em;margin-bottom:0.6rem;">Agenda tu llamada 1 a 1</h2>
+    <p style="font-size:0.88rem;color:rgba(255,255,255,0.5);max-width:480px;margin:0 auto;line-height:1.6;">Si quieres acompañamiento para aplicar esta metodología en tu marca, podemos ver si la mentoría personalizada <strong style="color:var(--brand-cyan);">Loops de Marcas Rentables</strong> es para ti.</p>
+  </div>
+  <!-- Calendly inline widget -->
+  <div class="calendly-inline-widget" data-url="https://calendly.com/fauadzkassen/1-a-1-crear-y-no-parar-linktree?hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=00d4ff" style="min-width:320px;height:700px;border-radius:10px;overflow:hidden;"></div>
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+</div>
+
+<footer style="background:#000;color:rgba(255,255,255,0.3);text-align:center;padding:1.8rem 2rem;margin-top:0;border-top:1px solid #1a1a1a;font-size:0.75rem;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;flex-wrap:wrap;">
+    <span style="color:var(--brand-cyan);font-weight:700;">LOOPS</span>
+    <span>de Marcas Rentables</span>
+    <span style="opacity:0.3;">·</span>
+    <span>MargenPro</span>
+    <span style="opacity:0.3;">·</span>
+    <span>Todos los cálculos son locales — tus datos no se almacenan</span>
+  </div>
+</footer>
+
+<script>
+// ─── ESTADO ───
+let currency = { symbol: '$', code: 'CLP' };
+
+const CURRENCIES = {
+  CLP: { symbol: '$', name: 'CLP' },
+  USD: { symbol: '$', name: 'USD' },
+  EUR: { symbol: '€', name: 'EUR' },
+  MXN: { symbol: '$', name: 'MXN' },
+  ARS: { symbol: '$', name: 'ARS' },
+  COP: { symbol: '$', name: 'COP' },
+  PEN: { symbol: 'S/', name: 'PEN' },
+};
+
+function updateCurrency() {
+  const sel = document.getElementById('currencySelect').value;
+  currency = CURRENCIES[sel];
+  // update all prefixes in margen
+  for(let i=1;i<=9;i++){
+    const el = document.getElementById('pfx'+i);
+    if(el) el.textContent = currency.symbol;
+  }
+  for(let i=1;i<=7;i++){
+    const el = document.getElementById('ppfx'+i);
+    if(el) el.textContent = currency.symbol;
+  }
+  calc();
+  calcPricing();
+}
+
+function fmt(n, decimals=0) {
+  if(isNaN(n)||n===null) return currency.symbol + '0';
+  const abs = Math.abs(n);
+  let str;
+  if(abs >= 1000000) str = (n/1000000).toFixed(1) + 'M';
+  else if(abs >= 1000) str = (n/1000).toFixed(1) + 'K';
+  else str = n.toFixed(decimals);
+  return currency.symbol + str;
+}
+
+function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (name==='margen'&&i===0)||(name==='pricing'&&i===1));
+  });
+}
+
+function resetMargen() {
+  ['ventasBrutas','descuentos','comisionPct','cmv','fulfillment','gastosAdmin','gastosOp','marketing','gastosVenta','gastosFinan']
+    .forEach(id => document.getElementById(id).value = '');
+  calc();
+}
+
+// ─── CÁLCULO MARGEN ───
+function calc() {
+  const vb   = v('ventasBrutas');
+  const desc = v('descuentos');
+  const comPct = v('comisionPct');
+  const cmv  = v('cmv');
+  const full = v('fulfillment');
+  const adm  = v('gastosAdmin');
+  const op   = v('gastosOp');
+  const mkt  = v('marketing');
+  const venta= v('gastosVenta');
+  const finan= v('gastosFinan');
+
+  const comAbs = vb * comPct / 100;
+  const ingrNeto = vb - desc - comAbs;
+  const exploit  = ingrNeto - cmv - full;
+  const opTotal  = adm + op;
+  const ventaTotal = mkt + venta;
+  const neto     = exploit - opTotal - ventaTotal - finan;
+  const margenPct= vb > 0 ? (neto / vb * 100) : 0;
+  const exploitPct = vb > 0 ? (exploit / vb * 100) : 0;
+
+  // waterfall
+  document.getElementById('wf-vb').textContent    = fmt(vb);
+  document.getElementById('wf-desc').textContent  = fmt(-desc);
+  document.getElementById('wf-com').textContent   = fmt(-comAbs);
+  document.getElementById('wf-ingrNeto').textContent = fmt(ingrNeto);
+  document.getElementById('wf-cmv').textContent   = fmt(-(cmv+full));
+  document.getElementById('wf-exploit').textContent= fmt(exploit) + (vb>0?` (${exploitPct.toFixed(1)}%)`:'');
+  document.getElementById('wf-op').textContent    = fmt(-(opTotal));
+  document.getElementById('wf-venta').textContent = fmt(-(ventaTotal));
+  document.getElementById('wf-finan').textContent = fmt(-(finan));
+  document.getElementById('wf-neto').textContent  = fmt(neto);
+
+  // main display
+  if(vb > 0) {
+    document.getElementById('margenPct').textContent = margenPct.toFixed(1) + '%';
+    document.getElementById('margenAbs').textContent = fmt(neto) + ' de margen sobre venta neta ' + fmt(vb);
+  } else {
+    document.getElementById('margenPct').textContent = '—';
+    document.getElementById('margenAbs').textContent = 'Ingresa tus datos para ver el resultado';
+  }
+
+  // gauge
+  const gaugeW = Math.max(0, Math.min(100, margenPct * 2));
+  const fill = document.getElementById('gaugeFill');
+  fill.style.width = gaugeW + '%';
+  if(margenPct < 5)       fill.style.background = '#ef4444';
+  else if(margenPct < 15) fill.style.background = '#fbbf24';
+  else                    fill.style.background = '#34d399';
+
+  // alerts
+  let alertHtml = '';
+  if(vb > 0) {
+    if(margenPct < 0) alertHtml = `<div class="alert danger">⚠️ <span>Tu negocio está perdiendo dinero. Los costos superan los ingresos por ${fmt(Math.abs(neto))}.</span></div>`;
+    else if(margenPct < 5) alertHtml = `<div class="alert danger">⚠️ <span>Margen crítico (${margenPct.toFixed(1)}%). Cualquier variación en costos te lleva a pérdida.</span></div>`;
+    else if(margenPct < 15) alertHtml = `<div class="alert warning">⚡ <span>Margen aceptable pero ajustado (${margenPct.toFixed(1)}%). Hay espacio para optimizar costos.</span></div>`;
+    else alertHtml = `<div class="alert success">✅ <span>Margen sólido (${margenPct.toFixed(1)}%). Estás en zona saludable para escalar.</span></div>`;
+  }
+  document.getElementById('alertBox').innerHTML = alertHtml;
+
+  // color total row
+  const netoRow = document.querySelector('.wf-row.total .wf-val');
+  if(netoRow) netoRow.style.color = neto >= 0 ? '#60d9a0' : '#ff7c60';
+}
+
+// ─── PRICING CURRENCY ───
+let pricingCur = { symbol: '$', code: 'CLP' };
+
+function updatePricingCurrency() {
+  var sel = document.getElementById('p_currency').value;
+  pricingCur = CURRENCIES[sel];
+  document.getElementById('pp_sym1').textContent = pricingCur.symbol;
+  document.getElementById('pp_sym2').textContent = pricingCur.symbol;
+  document.querySelectorAll('.p_local_sym').forEach(function(el){ el.textContent = pricingCur.symbol; });
+  document.querySelectorAll('.local-cur-label').forEach(function(el){ el.textContent = sel; });
+  document.getElementById('cogs_currency_label').textContent = sel;
+  document.getElementById('p_tc_label').textContent = sel;
+  calcPricing();
+}
+
+function fmtP(n) {
+  if (isNaN(n) || n === null) return pricingCur.symbol + '0';
+  var abs = Math.abs(n);
+  var str;
+  if (abs >= 1000000) str = (n/1000000).toFixed(1) + 'M';
+  else if (abs >= 1000) str = (n/1000).toFixed(1) + 'K';
+  else str = n.toFixed(0);
+  return pricingCur.symbol + str;
+}
+
+function calcPricing() {
+  var costo  = v('p_costo');
+  var envio  = v('p_envio');
+  var comPct = v('p_comision') / 100;
+  var lMin   = v('p_localMin');
+  var lMax   = v('p_localMax');
+  var iMin   = v('p_intlMin');
+  var iMax   = v('p_intlMax');
+  var tc     = v('p_tc') || 1;
+  var m1     = v('p_m1') / 100;
+  var m2     = v('p_m2') / 100;
+  var m3     = v('p_m3') / 100;
+
+  var cogs = costo + envio;
+  var cogsEl = document.getElementById('p_cogs_display');
+  if (cogsEl) cogsEl.textContent = cogs > 0 ? fmtP(cogs) : '—';
+
+  var iMinLocal = iMin * tc;
+  var iMaxLocal = iMax * tc;
+
+  var noteEl = document.getElementById('intl_converted_note');
+  if (noteEl) {
+    if (iMin > 0 || iMax > 0) {
+      noteEl.style.display = 'block';
+      var parts = [];
+      if (iMin > 0) parts.push('USD $' + iMin + ' → ' + fmtP(iMinLocal));
+      if (iMax > 0) parts.push('USD $' + iMax + ' → ' + fmtP(iMaxLocal));
+      noteEl.textContent = '💱 Convertido: ' + parts.join(' · ') + ' (TC: 1 USD = ' + fmtP(tc) + ')';
+    } else {
+      noteEl.style.display = 'none';
+    }
+  }
+
+  var showResults = cogs > 0;
+  document.getElementById('pricingEmpty').style.display      = showResults ? 'none' : 'block';
+  document.getElementById('precioSugeridoBox').style.display = showResults ? 'block' : 'none';
+  if (!showResults) return;
+
+  function precioParaMargen(m) {
+    var denom = (1 - comPct) * (1 - m);
+    if (denom <= 0) return null;
+    return cogs / denom;
+  }
+  function margenBruto(precio) {
+    if (!precio || precio <= 0) return 0;
+    var neto = precio * (1 - comPct);
+    return (neto - cogs) / neto * 100;
+  }
+  function gananciaBruta(precio) {
+    return precio * (1 - comPct) - cogs;
+  }
+
+  var pr1 = precioParaMargen(m1);
+  var pr2 = precioParaMargen(m2);
+  var pr3 = precioParaMargen(m3);
+
+  var hasLocal = lMin > 0 && lMax > 0;
+  var hasIntl  = iMin > 0 && iMax > 0;
+
+  var recPrice = null;
+  if (hasLocal && hasIntl)      recPrice = ((lMin+lMax)/2)*0.6 + ((iMinLocal+iMaxLocal)/2)*0.4;
+  else if (hasLocal)            recPrice = (lMin+lMax)/2;
+  else if (hasIntl)             recPrice = (iMinLocal+iMaxLocal)/2;
+
+  var sugeridoEl = document.getElementById('precioSugerido');
+  var notaEl     = document.getElementById('precioSugeridoNota');
+  if (recPrice) {
+    sugeridoEl.textContent = fmtP(recPrice);
+    notaEl.textContent = hasLocal && hasIntl
+      ? 'Media ponderada: mercado local (60%) + internacional convertido (40%)'
+      : hasLocal ? 'Basado en tus referencias del mercado local'
+      : 'Basado en referencias internacionales convertidas a moneda local';
+  } else {
+    sugeridoEl.textContent = '—';
+    notaEl.textContent = 'Ingresa referencias de mercado para obtener el precio sugerido';
+  }
+
+  var displayPrice = recPrice || pr2 || 0;
+  document.getElementById('ps_cogs').textContent     = fmtP(cogs);
+  document.getElementById('ps_ganancia').textContent = displayPrice ? fmtP(gananciaBruta(displayPrice)) : '—';
+  document.getElementById('ps_margen').textContent   = displayPrice ? margenBruto(displayPrice).toFixed(1)+'%' : '—';
+
+  function setScenario(n, precio) {
+    var prEl = document.getElementById('sc'+n+'-price');
+    var mgEl = document.getElementById('sc'+n+'-margin');
+    if (!precio) { prEl.textContent = 'N/D'; mgEl.textContent = ''; return; }
+    var mb = margenBruto(precio);
+    var gb = gananciaBruta(precio);
+    prEl.textContent = fmtP(precio);
+    mgEl.textContent = 'Margen bruto ' + mb.toFixed(1) + '% · Ganancia ' + fmtP(gb) + ' / unidad';
+  }
+  setScenario(1, pr1);
+  setScenario(2, pr2);
+  setScenario(3, pr3);
+
+  var mktEl = document.getElementById('mktCompare');
+  var hasMkt = hasLocal || hasIntl;
+  mktEl.style.display = (hasMkt && recPrice) ? 'block' : 'none';
+  if (hasMkt && recPrice) {
+    var rows = [];
+    rows.push('<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);font-weight:700;"><span>📍 Precio referencia mercado</span><span>'+fmtP(recPrice)+'</span></div>');
+    if (hasLocal) rows.push('<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;"><span style="color:var(--muted)">🏠 Rango mercado local</span><span>'+fmtP(lMin)+' – '+fmtP(lMax)+'</span></div>');
+    if (hasIntl) rows.push('<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;"><span style="color:var(--muted)">🌎 Rango internacional (convertido)</span><span>'+fmtP(iMinLocal)+' – '+fmtP(iMaxLocal)+'</span></div>');
+    var addSc = function(precio, label) {
+      if (!precio) return;
+      var diff = (precio - recPrice) / recPrice * 100;
+      var arrow = diff > 5 ? '↑' : diff < -5 ? '↓' : '→';
+      var col = diff > 15 ? '#b45309' : diff < -15 ? '#b91c1c' : '#166534';
+      rows.push('<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--muted)">'+arrow+' '+label+'</span><span style="font-weight:600">'+fmtP(precio)+' <span style="color:'+col+';font-size:0.72rem">('+( diff>0?'+':'')+diff.toFixed(0)+'% vs ref.)</span></span></div>');
+    };
+    addSc(pr1, 'Escenario 1 — Validación');
+    addSc(pr2, 'Escenario 2 — Producto Validado');
+    addSc(pr3, 'Escenario 3 — Poco Stock');
+    document.getElementById('mktCompareContent').innerHTML = rows.join('');
+  }
+
+  var alertHtml = '';
+  if (cogs > 0 && pr2) {
+    var mb2 = margenBruto(pr2);
+    if (mb2 < 10) alertHtml = '<div class="alert danger">⚠️ <span>Margen bruto en escenario validado muy bajo ('+mb2.toFixed(1)+'%). Revisa si puedes reducir costo de compra o envío.</span></div>';
+    else if (recPrice && pr2 > recPrice * 1.4) alertHtml = '<div class="alert warning">⚡ <span>Tu precio de producto validado está bastante por encima del mercado. Necesitarás una propuesta de valor muy clara.</span></div>';
+    else alertHtml = '<div class="alert success">✅ <span>Los 3 escenarios son viables con margen bruto positivo. Estrategia lista para ejecutar.</span></div>';
+  }
+  document.getElementById('pricingAlert').innerHTML = alertHtml;
+}
+
+// Init
+calc();
+calcPricing();
+</script>
+
+</body>
+</html>
